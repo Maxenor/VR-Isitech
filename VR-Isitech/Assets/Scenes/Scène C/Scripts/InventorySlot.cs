@@ -14,16 +14,31 @@ public class InventorySlot : MonoBehaviour
         {
             Debug.LogError("InventoryManager not found in the scene");
         }
-
-        // Attacher les événements
-        var slotTrigger = GetComponent<XRBaseInteractor>();
-        slotTrigger.selectEntered.AddListener(OnSelectEntered);
+        else
+        {
+            // Attacher les événements seulement si inventoryManager n'est pas null
+            var slotInteractable = GetComponent<XRSimpleInteractable>();
+            if (slotInteractable != null)
+            {
+                slotInteractable.selectEntered.AddListener(OnSelectEntered);
+            }
+            else
+            {
+                Debug.LogError("XRSimpleInteractable component not found on slot");
+            }
+        }
     }
 
     void OnDestroy()
     {
-        var slotTrigger = GetComponent<XRBaseInteractor>();
-        slotTrigger.selectEntered.RemoveListener(OnSelectEntered);
+        if (inventoryManager != null)
+        {
+            var slotInteractable = GetComponent<XRSimpleInteractable>();
+            if (slotInteractable != null)
+            {
+                slotInteractable.selectEntered.RemoveListener(OnSelectEntered);
+            }
+        }
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args)
