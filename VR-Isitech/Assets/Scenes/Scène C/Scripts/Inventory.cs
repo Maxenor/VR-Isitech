@@ -1,36 +1,45 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public Image[] slots; // Corresponds to inventory slots
-    private int currentIndex = 0;
+    public List<GameObject> inventorySlots = new List<GameObject>(3);
+    public Transform beltPosition;
+    public GameObject slotPrefab; // Un prefab de cube ou de sprite représentant un slot
 
     void Start()
     {
-        ClearSlots(); // Clear the inventory at the start
-    }
+        for (int i = 0; i < 3; i++)
+        {
+            inventorySlots.Add(null);
 
-    public void AddItem()
-    {
-        if (currentIndex < slots.Length)
-        {
-            slots[currentIndex].color = Color.green; // Change the color to indicate an item was added
-            currentIndex++;
-            Debug.Log("Item added to inventory");
-        }
-        else
-        {
-            Debug.Log("Inventory full!");
+            // Créer visuellement les slots d'inventaire
+            GameObject slot = Instantiate(slotPrefab, beltPosition);
+            slot.transform.localPosition = new Vector3(i * 0.1f, 0, 0); // Espacement des slots
         }
     }
 
-    public void ClearSlots()
+    public void AddItem(GameObject item)
     {
-        foreach (var slot in slots)
+        for (int i = 0; i < inventorySlots.Count; i++)
         {
-            slot.color = Color.white; // Reset the color
+            if (inventorySlots[i] == null)
+            {
+                inventorySlots[i] = item;
+                item.SetActive(false); // Cacher l'objet
+                return;
+            }
         }
-        currentIndex = 0;
+    }
+
+    public void RemoveItem(int slotIndex, Transform hand)
+    {
+        if (inventorySlots[slotIndex] != null)
+        {
+            inventorySlots[slotIndex].SetActive(true); // Montrer l'objet
+            inventorySlots[slotIndex].transform.position = hand.position;
+            inventorySlots[slotIndex].transform.parent = hand;
+            inventorySlots[slotIndex] = null;
+        }
     }
 }
