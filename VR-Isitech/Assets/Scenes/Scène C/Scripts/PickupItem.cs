@@ -44,8 +44,9 @@ public class PickupItem : MonoBehaviour
     {
         if (other.CompareTag("Belt"))
         {
-            isNearBelt = true;
-            Debug.Log("Near belt");
+            Debug.Log("belt");
+            inventoryManager.AddItem(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
