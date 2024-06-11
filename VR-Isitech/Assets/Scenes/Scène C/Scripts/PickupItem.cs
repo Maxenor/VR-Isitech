@@ -13,7 +13,7 @@ public class PickupItem : MonoBehaviour
     void Update()
     {
         // Détecter si l'utilisateur met la main au niveau de la ceinture
-        if (isNearBelt && Input.GetButtonUp("Grab")) // "Grab" est le bouton de relâchement
+        if (isNearBelt && Input.GetButtonUp("Fire1")) // Utilisez le bouton approprié pour relâcher l'objet
         {
             if (inventoryManager.AddItem(gameObject))
             {

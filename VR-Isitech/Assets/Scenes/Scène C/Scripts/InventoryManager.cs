@@ -13,10 +13,9 @@ public class InventoryManager : MonoBehaviour
         // Initialiser les emplacements de l'inventaire à la ceinture
         for (int i = 0; i < 3; i++)
         {
-            GameObject slot = new GameObject("Slot" + (i + 1));
+            GameObject slot = inventorySlots[i];
             slot.transform.SetParent(beltPosition);
-            slot.transform.localPosition = new Vector3(i * 0.2f, 0, 0); // Espacement des emplacements
-            inventorySlots.Add(slot);
+            slot.transform.localPosition = new Vector3(i * 0.2f - 0.2f, 0, 0); // Espacement des emplacements
         }
     }
 
@@ -43,6 +42,7 @@ public class InventoryManager : MonoBehaviour
             GameObject item = items[slotIndex];
             items[slotIndex] = null;
             item.SetActive(true); // Afficher l'objet
+            item.transform.SetParent(null);
             return item;
         }
         return null;

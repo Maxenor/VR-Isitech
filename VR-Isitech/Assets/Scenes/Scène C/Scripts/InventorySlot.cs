@@ -13,7 +13,8 @@ public class InventorySlot : MonoBehaviour
 
     void Update()
     {
-        if (isHandNear && Input.GetButtonUp("Grab")) // "Grab" est le bouton de prise
+        // Détecter si l'utilisateur veut prendre un objet de l'inventaire
+        if (isHandNear && Input.GetButtonUp("Fire1")) // Utilisez le bouton approprié pour attraper l'objet
         {
             if (inventoryManager.IsSlotOccupied(slotIndex))
             {
@@ -21,8 +22,6 @@ public class InventorySlot : MonoBehaviour
                 if (item != null)
                 {
                     // Mettre l'objet dans la main de l'utilisateur
-                    item.transform.SetParent(null);
-                    item.SetActive(true);
                     Debug.Log("Objet sorti de l'inventaire.");
                 }
             }
