@@ -4,7 +4,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class PickupItem : MonoBehaviour
 {
     private InventoryManager inventoryManager;
-    private bool isNearBelt = false;
 
     void Start()
     {
@@ -14,39 +13,16 @@ public class PickupItem : MonoBehaviour
             Debug.LogError("InventoryManager not found in the scene");
         }
 
-        // Attacher les événements
-        var grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectExited.AddListener(OnSelectExited);
-    }
-
-    void OnDestroy()
-    {
-        var grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectExited.RemoveListener(OnSelectExited);
-    }
-
-    private void OnSelectExited(SelectExitEventArgs args)
-    {
-        if (isNearBelt)
-        {
-            if (inventoryManager.AddItem(gameObject))
-            {
-                Debug.Log("Objet ajouté à l'inventaire.");
-            }
-            else
-            {
-                Debug.Log("Inventaire plein.");
-            }
-        }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Belt"))
         {
-            Debug.Log("belt");
-            inventoryManager.AddItem(gameObject);
-            gameObject.SetActive(false);
+            bool added = inventoryManager.AddItem(gameObject);
+            if (added) {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -54,7 +30,6 @@ public class PickupItem : MonoBehaviour
     {
         if (other.CompareTag("Belt"))
         {
-            isNearBelt = false;
             Debug.Log("Left belt area");
         }
     }

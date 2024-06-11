@@ -6,7 +6,7 @@ public class InventoryManager : MonoBehaviour
     public List<GameObject> inventorySlots = new List<GameObject>(3);
     public Transform beltPosition; // La position de la ceinture de l'utilisateur
 
-    private GameObject[] items = new GameObject[3]; // Tableau pour stocker les objets
+    private List<GameObject> items = new List<GameObject>(3);
 
     void Start()
     {
@@ -20,15 +20,12 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(GameObject item)
     {
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Capacity; i++)
         {
-            if (items[i] == null)
+            if (items.Count <= i)
             {
-                items[i] = item;
-                item.transform.SetParent(inventorySlots[i].transform);
-                item.transform.localPosition = Vector3.zero;
-                item.SetActive(false);
-                Debug.Log($"Item added to slot {i}");
+
+                items.Add(item);
                 return true;
             }
         }
@@ -38,7 +35,7 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject RemoveItem(int slotIndex)
     {
-        if (slotIndex >= 0 && slotIndex < items.Length && items[slotIndex] != null)
+        if (slotIndex >= 0 && slotIndex < items.Capacity && items[slotIndex] != null)
         {
             GameObject item = items[slotIndex];
             items[slotIndex] = null;
