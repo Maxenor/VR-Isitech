@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class InventorySlot : MonoBehaviour
 {
@@ -9,21 +10,30 @@ public class InventorySlot : MonoBehaviour
     void Start()
     {
         inventoryManager = FindObjectOfType<InventoryManager>();
+        if (inventoryManager == null)
+        {
+            Debug.LogError("InventoryManager not found in the scene");
+        }
+
+        // Attacher les événements
+        var slotTrigger = GetComponent<XRBaseInteractor>();
+        slotTrigger.selectEntered.AddListener(OnSelectEntered);
     }
 
-    void Update()
+    void OnDestroy()
     {
-        // Détecter si l'utilisateur veut prendre un objet de l'inventaire
-        if (isHandNear && Input.GetButtonUp("Fire1")) // Utilisez le bouton approprié pour attraper l'objet
+        var slotTrigger = GetComponent<XRBaseInteractor>();
+        slotTrigger.selectEntered.RemoveListener(OnSelectEntered);
+    }
+
+    private void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        if (isHandNear && inventoryManager.IsSlotOccupied(slotIndex))
         {
-            if (inventoryManager.IsSlotOccupied(slotIndex))
+            GameObject item = inventoryManager.RemoveItem(slotIndex);
+            if (item != null)
             {
-                GameObject item = inventoryManager.RemoveItem(slotIndex);
-                if (item != null)
-                {
-                    // Mettre l'objet dans la main de l'utilisateur
-                    Debug.Log("Objet sorti de l'inventaire.");
-                }
+                Debug.Log($"Objet sorti de l'inventaire du slot {slotIndex}");
             }
         }
     }
@@ -33,6 +43,7 @@ public class InventorySlot : MonoBehaviour
         if (other.CompareTag("Hand"))
         {
             isHandNear = true;
+            Debug.Log($"Hand near slot {slotIndex}");
         }
     }
 
@@ -41,6 +52,7 @@ public class InventorySlot : MonoBehaviour
         if (other.CompareTag("Hand"))
         {
             isHandNear = false;
+            Debug.Log($"Hand left slot {slotIndex}");
         }
     }
 }

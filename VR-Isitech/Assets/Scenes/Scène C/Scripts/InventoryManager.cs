@@ -10,12 +10,11 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        // Initialiser les emplacements de l'inventaire à la ceinture
         for (int i = 0; i < 3; i++)
         {
             GameObject slot = inventorySlots[i];
             slot.transform.SetParent(beltPosition);
-            slot.transform.localPosition = new Vector3(i * 0.2f - 0.2f, 0, 0); // Espacement des emplacements
+            slot.transform.localPosition = new Vector3(i * 0.2f - 0.2f, 0, 0);
         }
     }
 
@@ -28,10 +27,12 @@ public class InventoryManager : MonoBehaviour
                 items[i] = item;
                 item.transform.SetParent(inventorySlots[i].transform);
                 item.transform.localPosition = Vector3.zero;
-                item.SetActive(false); // Masquer l'objet
+                item.SetActive(false);
+                Debug.Log($"Item added to slot {i}");
                 return true;
             }
         }
+        Debug.Log("Inventory is full");
         return false;
     }
 
@@ -41,8 +42,9 @@ public class InventoryManager : MonoBehaviour
         {
             GameObject item = items[slotIndex];
             items[slotIndex] = null;
-            item.SetActive(true); // Afficher l'objet
+            item.SetActive(true);
             item.transform.SetParent(null);
+            Debug.Log($"Item removed from slot {slotIndex}");
             return item;
         }
         return null;
