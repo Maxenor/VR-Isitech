@@ -1,80 +1,55 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class InventoryManager : MonoBehaviour
 {
-    public Inventory inventory;
-    public Transform beltPosition;
-    public GameObject beltCollider;
-    public GameObject visualIndicator;
+    public List<GameObject> inventorySlots = new List<GameObject>(3);
+    public Transform beltPosition; // La position de la ceinture de l'utilisateur
 
-    private XRGrabInteractable currentItem;
-    private bool isNearBelt = false;
+    private GameObject[] items = new GameObject[3]; // Tableau pour stocker les objets
 
     void Start()
     {
-        visualIndicator.SetActive(false);
-        if (beltCollider != null)
+        // Initialiser les emplacements de l'inventaire à la ceinture
+        for (int i = 0; i < 3; i++)
         {
-            beltCollider.GetComponent<Collider>().isTrigger = true;
+            GameObject slot = new GameObject("Slot" + (i + 1));
+            slot.transform.SetParent(beltPosition);
+            slot.transform.localPosition = new Vector3(i * 0.2f, 0, 0); // Espacement des emplacements
+            inventorySlots.Add(slot);
         }
     }
 
-    void Update()
+    public bool AddItem(GameObject item)
     {
-        if (currentItem != null)
+        for (int i = 0; i < items.Length; i++)
         {
-            CheckHandNearBelt();
+            if (items[i] == null)
+            {
+                items[i] = item;
+                item.transform.SetParent(inventorySlots[i].transform);
+                item.transform.localPosition = Vector3.zero;
+                item.SetActive(false); // Masquer l'objet
+                return true;
+            }
         }
+        return false;
     }
 
-    public void OnSelectEnter(XRBaseInteractor interactor)
+    public GameObject RemoveItem(int slotIndex)
     {
-        currentItem = interactor.selectTarget as XRGrabInteractable;
+        if (slotIndex >= 0 && slotIndex < items.Length && items[slotIndex] != null)
+        {
+            GameObject item = items[slotIndex];
+            items[slotIndex] = null;
+            item.SetActive(true); // Afficher l'objet
+            return item;
+        }
+        return null;
     }
 
-    public void OnSelectExit(XRBaseInteractor interactor)
+    public bool IsSlotOccupied(int slotIndex)
     {
-        if (isNearBelt)
-        {
-            inventory.AddItem(currentItem.gameObject);
-            Destroy(currentItem.gameObject);
-            isNearBelt = false;
-            visualIndicator.SetActive(false);
-        }
-        currentItem = null;
-    }
-
-    private void CheckHandNearBelt()
-    {
-        float distanceToBelt = Vector3.Distance(currentItem.transform.position, beltPosition.position);
-        if (distanceToBelt < 0.2f && !isNearBelt)
-        {
-            isNearBelt = true;
-            visualIndicator.SetActive(true);
-        }
-        else if (distanceToBelt >= 0.2f && isNearBelt)
-        {
-            isNearBelt = false;
-            visualIndicator.SetActive(false);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject == currentItem.gameObject)
-        {
-            isNearBelt = true;
-            visualIndicator.SetActive(true);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject == currentItem.gameObject)
-        {
-            isNearBelt = false;
-            visualIndicator.SetActive(false);
-        }
+        return items[slotIndex] != null;
     }
 }
