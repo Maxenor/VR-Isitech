@@ -7,7 +7,9 @@ public class PickupItem : MonoBehaviour
 
     void Start()
     {
-        inventoryManager = FindObjectOfType<InventoryManager>();
+        Transform parentTransform = transform.parent;
+        inventoryManager = parentTransform.GetComponent<InventoryManager>();
+
         if (inventoryManager == null)
         {
             Debug.LogError("InventoryManager not found in the scene");
@@ -19,9 +21,11 @@ public class PickupItem : MonoBehaviour
     {
         if (other.CompareTag("Belt"))
         {
-            bool added = inventoryManager.AddItem(gameObject);
+            GameObject gameObjectCurrent = gameObject;
+            bool added = inventoryManager.AddItem(gameObjectCurrent);
             if (added) {
-                Destroy(gameObject);
+                // Destroy(gameObjectCurrent);
+                gameObjectCurrent.SetActive(false);
             }
         }
     }

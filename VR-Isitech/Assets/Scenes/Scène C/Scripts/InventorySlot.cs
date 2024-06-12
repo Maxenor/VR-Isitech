@@ -45,11 +45,8 @@ public class InventorySlot : MonoBehaviour
     {
         if (isHandNear && inventoryManager.IsSlotOccupied(slotIndex))
         {
-            GameObject item = inventoryManager.RemoveItem(slotIndex);
-            if (item != null)
-            {
-                Debug.Log($"Objet sorti de l'inventaire du slot {slotIndex}");
-            }
+            inventoryManager = FindObjectOfType<InventoryManager>();
+            inventoryManager.RemoveItem();
         }
     }
 
