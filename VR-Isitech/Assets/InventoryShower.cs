@@ -11,7 +11,6 @@ public class InventoryShower : MonoBehaviour
     {
         for (int i = 0; i < spheresObjectArray.Length; i++) {
             if(spheresObjectArray[i] != null) {
-                spheresObjectArray[i].AddComponent<GrabHandler>();
                 spheresObjectArray[i].SetActive(false);
             }
         }
@@ -24,15 +23,12 @@ public class InventoryShower : MonoBehaviour
     }
 
     public void show(int spheres) {
-        InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
-        foreach (GameObject sp in spheresObjectArray) {
-            sp.SetActive(false);
-        }
-
-        for (int i = 0; i < spheres; i++) {
-            if(spheresObjectArray[i] != null) {
+        for (int i = 0; i < spheresObjectArray.Length; i++) {  
+            if (i < spheres) {
                 spheresObjectArray[i].SetActive(true);
-            }
+            } else {
+                spheresObjectArray[i].SetActive(false);
+            }  
         }
     }
 }

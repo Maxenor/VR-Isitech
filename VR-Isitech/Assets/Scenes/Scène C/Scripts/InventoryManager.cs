@@ -5,45 +5,65 @@ public class InventoryManager : MonoBehaviour
 {
     public List<GameObject> items = new List<GameObject>(3);
     public Camera cameraGame;
+    public Transform userTransform; // Transform du joueur
+    public float distanceInFrontOfUser = 2.0f; // Distance devant l'utilisateur où l'objet doit apparaître
+    public float minHeight = 2.0f;
 
     void Start()
     {
 
     }
-
     public bool AddItem(GameObject item)
     {
-        for (int i = 0; i < items.Capacity; i++)
+        if (items.Count <= items.Capacity)
         {
-            if (items.Count <= i)
-            {
-                Debug.Log("On ajoute :");
-                Debug.Log(item);
-                items.Add(item);
-                InventoryShower inventoryShower = FindObjectOfType<InventoryShower>();
-                inventoryShower.show(items.Count);
-                return true;
-            }
+            Debug.Log("On ajoute :");
+            Debug.Log(item);
+            items.Add(item);
+            InventoryShower inventoryShower = FindObjectOfType<InventoryShower>();
+            inventoryShower.show(items.Count);
+            Debug.Log(items.Count);
+            return true;
         }
         Debug.Log("Inventory is full");
         return false;
     }
-
     public void RemoveItem()
     {
-        GameObject item = items[0];
-        items.RemoveAt(0);
+        if (items.Count != 0  )
+        {
+            // Récupère l'objet à retirer de l'inventaire
+            GameObject item = items[0];
+            items.RemoveAt(0);
+            // Met l'objet actif
+            item.SetActive(true);
 
-        // Vector3 positionCamera = cameraGame.transform.position;
-        // Quaternion rotationCamera = cameraGame.transform.rotation;
-        // Vector3 positionDevantCamera = positionCamera + (rotationCamera * Vector3.forward * 3f);
-        // item.transform.position = positionDevantCamera;
+            // Calcule la nouvelle position basée sur la position du joueur et la direction où il regarde
+            Vector3 newPosition = userTransform.position + userTransform.forward * distanceInFrontOfUser;
 
-        item.SetActive(true);
-        InventoryShower inventoryShower = FindObjectOfType<InventoryShower>();
-        inventoryShower.show(items.Count);
+        // Vérifier et ajuster la hauteur minimale
+            if (newPosition.y < minHeight)
+            {
+                newPosition.y = minHeight;
+            }
+            // Place l'objet à la nouvelle position
+            item.transform.position = newPosition;
 
-        Debug.Log($"Item removed from slot {0}");
+            //item.transform.rotation = userTransform.rotation;
+
+            Debug.Log(newPosition);
+            Debug.Log(userTransform.rotation);
+
+            // Met à jour l'affichage de l'inventaire
+            InventoryShower inventoryShower = FindObjectOfType<InventoryShower>();
+            inventoryShower.show(items.Count);
+
+            Debug.Log($"Item removed from slot {0} and placed at {newPosition}");
+        }
+        else
+        {
+            Debug.LogWarning("No items to remove from inventory.");
+        }
     }
 
     public bool IsSlotOccupied(int slotIndex)
