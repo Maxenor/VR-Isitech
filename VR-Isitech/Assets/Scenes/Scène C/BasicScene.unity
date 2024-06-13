@@ -1877,6 +1877,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6694496370488184924, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
+      propertyPath: m_InteractionManager
+      value: 
+      objectReference: {fileID: 1012881609}
     - target: {fileID: 7313654230448209575, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
       propertyPath: m_Name
       value: Complete XR Origin Set Up
@@ -1891,7 +1895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7873184977108000993, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
       propertyPath: m_CameraYOffset
-      value: 1.5
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 7873184977108000993, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
       propertyPath: m_RequestedTrackingOriginMode
@@ -1905,6 +1909,10 @@ PrefabInstance:
       propertyPath: m_ModelPrefab
       value: 
       objectReference: {fileID: 608441948}
+    - target: {fileID: 9168142743249570444, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
+      propertyPath: m_MoveSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9168142743249570444, guid: 895f6f3c2d334633b5800312285058d2, type: 3}
       propertyPath: m_GravityApplicationMode
       value: 1
@@ -2156,8 +2164,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.26684955, y: 0.22251827, z: 0.26980978}
-  m_Center: {x: -0.04192148, y: 0.016852245, z: -0.010187916}
+  m_Size: {x: 0.26684955, y: 0.289323, z: 0.35631716}
+  m_Center: {x: -0.04192148, y: 0.018137485, z: 0.033065766}
 --- !u!1001 &665080554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3238,8 +3246,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1824562, y: 0.20230597, z: 0.2551546}
-  m_Center: {x: 0.043304555, y: 0.016410135, z: -0.00042984635}
+  m_Size: {x: 0.1824562, y: 0.29842415, z: 0.3309651}
+  m_Center: {x: 0.043304555, y: 0.0024597496, z: 0.037475415}
 --- !u!1 &1024898462
 GameObject:
   m_ObjectHideFlags: 0
