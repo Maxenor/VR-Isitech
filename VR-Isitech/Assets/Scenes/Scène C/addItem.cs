@@ -40,7 +40,7 @@ public class addItem : MonoBehaviour
         item.transform.localScale = Vector3.one;
 
         // Réduit la taille de l'item
-        item.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        item.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         var rigidbody = item.GetComponent<Rigidbody>();
         if (rigidbody != null)
