@@ -6,8 +6,23 @@ using UnityEngine.SceneManagement;  // Ajouté pour SceneManager
 
 public class addItem : MonoBehaviour
 {
-    // Dictionnaire pour suivre les objets et leurs états dans l'inventaire
+    
+    public Color canAddColor = Color.green;
+    public Color originalColor = new Color(1, 1, 1, 0);
+    private Renderer slotRenderer;
     private Dictionary<GameObject, bool> inventoryItems = new Dictionary<GameObject, bool>();
+    private void Start()
+    {
+        slotRenderer = GetComponent<Renderer>();
+        slotRenderer.material.color = originalColor;
+    }
+    private void Update()
+    {
+       if(inventoryItems.Count == 0 )
+       {
+        slotRenderer.material.color = canAddColor;
+       }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,16 +31,24 @@ public class addItem : MonoBehaviour
         GameObject gameObject = other.gameObject;
         if (gameObject.CompareTag("collectible") && gameObject.GetComponent<XRGrabInteractable>())
         {
-            // Vérifier si l'inventaire est vide
+            
             if (inventoryItems.Count == 0)
             {
-                Debug.Log("Item dans inventaire !");
                 AttachToCube(gameObject);
             }
             else
             {
                 Debug.Log("Inventaire déjà plein.");
+              
             }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        GameObject gameObject = other.gameObject;
+        if (gameObject.CompareTag("collectible") && gameObject.GetComponent<XRGrabInteractable>())
+        {
+            slotRenderer.material.color = originalColor;
         }
     }
 
@@ -64,6 +87,7 @@ public class addItem : MonoBehaviour
         {
             inventoryItems[item] = true;
         }
+        slotRenderer.material.color = originalColor;
     }
 
     void OnItemGrabbed(SelectExitEventArgs args)
@@ -97,5 +121,6 @@ public class addItem : MonoBehaviour
             inventoryItems[item] = false;
             inventoryItems.Remove(item); // Retirer l'objet du dictionnaire lorsqu'il est sorti de l'inventaire
         }
+        slotRenderer.material.color = originalColor;
     }
 }
